@@ -33,6 +33,12 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private PostStatus status;
 
+    //load only when explicitly accessed
+    @ManyToOne(fetch = FetchType.LAZY)
+    //foreign key
+    @JoinColumn(name = "author_id", nullable = false)
+    private User author;
+
     @Column(nullable = false)
     private Integer readingTime;
 
