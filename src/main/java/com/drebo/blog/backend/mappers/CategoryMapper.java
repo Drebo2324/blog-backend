@@ -2,6 +2,7 @@ package com.drebo.blog.backend.mappers;
 
 import com.drebo.blog.backend.domain.PostStatus;
 import com.drebo.blog.backend.domain.dtos.CategoryDto;
+import com.drebo.blog.backend.domain.dtos.CreateCategoryRequest;
 import com.drebo.blog.backend.domain.entities.Category;
 import com.drebo.blog.backend.domain.entities.Post;
 import org.mapstruct.Mapper;
@@ -21,6 +22,8 @@ public interface CategoryMapper {
     //Use calculatePostCount method to do it
     @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatePostCount")
     CategoryDto toDto(Category category);
+
+    Category toEntity(CreateCategoryRequest createCategoryRequest);
 
     @Named("calculatePostCount")
     default long calculatePostCount(List<Post> posts) {
