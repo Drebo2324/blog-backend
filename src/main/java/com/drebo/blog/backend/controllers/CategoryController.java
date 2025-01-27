@@ -2,6 +2,7 @@ package com.drebo.blog.backend.controllers;
 
 import com.drebo.blog.backend.domain.dtos.CategoryDto;
 import com.drebo.blog.backend.domain.entities.Category;
+import com.drebo.blog.backend.mappers.CategoryMapper;
 import com.drebo.blog.backend.services.implementations.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,12 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final CategoryMapper categoryMapper;
 
     @GetMapping
     public ResponseEntity<List<CategoryDto>> listCategories() {
-        return List<Category> categories = categoryService.listCategories();
-        //TODO: MAP TO DTO
+        List<CategoryDto> categories = categoryService.listCategories()
+                .stream().map(categoryMapper::toDto).toList();
+        return ResponseEntity.ok(categories);
     }
 }
