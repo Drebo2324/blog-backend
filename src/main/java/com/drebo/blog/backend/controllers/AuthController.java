@@ -2,7 +2,7 @@ package com.drebo.blog.backend.controllers;
 
 import com.drebo.blog.backend.domain.dtos.AuthResponse;
 import com.drebo.blog.backend.domain.dtos.LoginRequest;
-import com.drebo.blog.backend.services.AuthenticationService;
+import com.drebo.blog.backend.services.implementations.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
