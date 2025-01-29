@@ -2,7 +2,7 @@ package com.drebo.blog.backend.services.implementations;
 
 import com.drebo.blog.backend.domain.entities.Category;
 import com.drebo.blog.backend.repositories.CategoryRepository;
-import com.drebo.blog.backend.services.CategoryServiceInterface;
+import com.drebo.blog.backend.services.CategoryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService implements CategoryServiceInterface {
+public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 

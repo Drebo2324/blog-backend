@@ -1,6 +1,6 @@
 package com.drebo.blog.backend.services.implementations;
 
-import com.drebo.blog.backend.services.AuthenticationServiceInterface;
+import com.drebo.blog.backend.services.AuthenticationService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService implements AuthenticationServiceInterface {
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;

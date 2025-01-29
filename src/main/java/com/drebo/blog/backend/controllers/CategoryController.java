@@ -4,7 +4,7 @@ import com.drebo.blog.backend.domain.dtos.CategoryDto;
 import com.drebo.blog.backend.domain.dtos.CreateCategoryRequest;
 import com.drebo.blog.backend.domain.entities.Category;
 import com.drebo.blog.backend.mappers.CategoryMapper;
-import com.drebo.blog.backend.services.implementations.CategoryService;
+import com.drebo.blog.backend.services.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
