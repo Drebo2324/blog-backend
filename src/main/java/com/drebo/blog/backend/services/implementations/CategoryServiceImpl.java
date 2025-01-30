@@ -49,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     //Not returning Optional. Throw Exception
     @Override
-    public Category FindCategoryById(UUID id) {
+    public Category findCategoryById(UUID id) {
         return categoryRepository.findById(id).orElseThrow(() ->
             new EntityNotFoundException("Category not found with ID:" + id)
         );
