@@ -3,6 +3,7 @@ package com.drebo.blog.backend.services.implementations;
 import com.drebo.blog.backend.domain.entities.Tag;
 import com.drebo.blog.backend.repositories.TagRepository;
 import com.drebo.blog.backend.services.TagService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,5 +62,12 @@ public class TagServiceImpl implements TagService {
             }
             tagRepository.deleteById(id);
         });
+    }
+
+    //throw exception rather than return optional
+    @Override
+    public Tag findTagById(UUID id) {
+        return tagRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Tag not found with ID:" + id));
     }
 }
