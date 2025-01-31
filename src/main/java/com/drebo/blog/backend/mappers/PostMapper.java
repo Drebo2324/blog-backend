@@ -1,5 +1,7 @@
 package com.drebo.blog.backend.mappers;
 
+import com.drebo.blog.backend.domain.CreatePostRequest;
+import com.drebo.blog.backend.domain.dtos.CreatePostRequestDto;
 import com.drebo.blog.backend.domain.dtos.PostDto;
 import com.drebo.blog.backend.domain.entities.Post;
 import org.mapstruct.Mapper;
@@ -14,4 +16,5 @@ public interface PostMapper {
     @Mapping(target = "tags", source = "tags")
     PostDto toDto(Post post);
 
+    CreatePostRequest toCreatePostRequest(CreatePostRequestDto createPostRequestDto);
 }

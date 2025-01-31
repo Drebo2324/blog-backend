@@ -1,5 +1,6 @@
 package com.drebo.blog.backend.services.implementations;
 
+import com.drebo.blog.backend.domain.CreatePostRequest;
 import com.drebo.blog.backend.domain.PostStatus;
 import com.drebo.blog.backend.domain.entities.Category;
 import com.drebo.blog.backend.domain.entities.Post;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +25,8 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final CategoryService categoryService;
     private final TagService tagService;
+
+    private static final int WORDS_PER_MINUTE = 200;
 
     @Transactional(readOnly = true) //no db calls make changes
     @Override
@@ -57,5 +61,39 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getDraftPosts(User user) {
         return postRepository.findAllByAuthorAndStatus(user, PostStatus.DRAFT);
+    }
+
+    @Override
+    public Post createPost(User user, CreatePostRequest createPostRequest) {
+
+        Category category = categoryService.findCategoryById(createPostRequest.getCategoryId());
+//        Set<Tag> tags = createPostRequest.getTagIds().stream().map(
+//                tagService::findTagById).collect(Collectors.toSet());
+        List<Tag> tags = tagService.findTagsById(createPostRequest.getTagIds());
+
+        Post newPost = Post.builder()
+                .title(createPostRequest.getTitle())
+                .content(createPostRequest.getContent())
+                .author(user)
+                .postStatus(createPostRequest.getPostStatus())
+                .category(category)
+                .tags(new HashSet<>(tags))
+                .readingTime(calculateReadingTime(createPostRequest.getContent()))
+                .build();
+
+        return postRepository.save(newPost);
+    }
+
+    private Integer calculateReadingTime(String content) {
+        if(content == null || content.trim().isEmpty()) {
+            return 0;
+        }
+
+        //trim leading/trailing space
+        //split to array of substrings using any one or more space as delimiter
+        String[] words = content.trim().split("\\s+");
+        int wordCount = words.length;
+
+        return (int)(Math.ceil((double) wordCount / WORDS_PER_MINUTE));
     }
 }

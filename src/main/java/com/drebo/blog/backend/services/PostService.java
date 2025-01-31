@@ -1,5 +1,6 @@
 package com.drebo.blog.backend.services;
 
+import com.drebo.blog.backend.domain.CreatePostRequest;
 import com.drebo.blog.backend.domain.entities.Post;
 import com.drebo.blog.backend.domain.entities.User;
 
@@ -10,4 +11,5 @@ public interface PostService {
 
     List<Post> getAllPosts(UUID categoryId, UUID tagId);
     List<Post> getDraftPosts(User user);
+    Post createPost(User user, CreatePostRequest createPostRequest);
 }

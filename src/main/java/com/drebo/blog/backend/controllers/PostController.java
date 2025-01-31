@@ -1,5 +1,7 @@
 package com.drebo.blog.backend.controllers;
 
+import com.drebo.blog.backend.domain.CreatePostRequest;
+import com.drebo.blog.backend.domain.dtos.CreatePostRequestDto;
 import com.drebo.blog.backend.domain.dtos.PostDto;
 import com.drebo.blog.backend.domain.entities.Post;
 import com.drebo.blog.backend.domain.entities.User;
@@ -44,5 +46,20 @@ public class PostController {
         List<PostDto> draftPostsDto = draftPosts.stream().map(postMapper::toDto).toList();
 
         return new ResponseEntity<>(draftPostsDto, HttpStatus.OK);
+    }
+
+    //use userId so only logged-in user can create posts
+    @PostMapping
+    public ResponseEntity<PostDto> createPost(@RequestBody CreatePostRequestDto request,
+                                                 @RequestAttribute UUID userId) {
+
+        User loggedInUser = userService.getUserById(userId);
+
+        CreatePostRequest createPostRequest = postMapper.toCreatePostRequest(request);
+
+        Post createdPost = postService.createPost(loggedInUser, createPostRequest);
+        PostDto createdPostDto = postMapper.toDto(createdPost);
+
+        return new ResponseEntity<>(createdPostDto, HttpStatus.CREATED);
     }
 }
