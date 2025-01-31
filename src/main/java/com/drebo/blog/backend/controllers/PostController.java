@@ -2,15 +2,14 @@ package com.drebo.blog.backend.controllers;
 
 import com.drebo.blog.backend.domain.dtos.PostDto;
 import com.drebo.blog.backend.domain.entities.Post;
+import com.drebo.blog.backend.domain.entities.User;
 import com.drebo.blog.backend.mappers.PostMapper;
 import com.drebo.blog.backend.services.PostService;
+import com.drebo.blog.backend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +21,7 @@ public class PostController {
 
     private final PostService postService;
     private final PostMapper postMapper;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<PostDto>> getAllPosts(
@@ -29,9 +29,20 @@ public class PostController {
             @RequestParam(required = false) UUID tagId) {
 
         List<Post> posts = postService.getAllPosts(categoryId, tagId);
+        List<PostDto> postsDto = posts.stream().map(postMapper::toDto).toList();
+        return new ResponseEntity<>(postsDto, HttpStatus.OK);
+    }
 
-        List<PostDto> postDtos = posts.stream().map(postMapper::toDto).toList();
+    //filter drafts based on logged-in user with userId
+    //TODO: Implement proper Authorization
+    @GetMapping(path = "/drafts")
+    public  ResponseEntity<List<PostDto>> getAllDrafts(@RequestAttribute UUID userId) {
 
-        return new ResponseEntity<>(postDtos, HttpStatus.OK);
+        User loggedInUser = userService.getUserById(userId);
+        List<Post> draftPosts = postService.getDraftPosts(loggedInUser);
+
+        List<PostDto> draftPostsDto = draftPosts.stream().map(postMapper::toDto).toList();
+
+        return new ResponseEntity<>(draftPostsDto, HttpStatus.OK);
     }
 }

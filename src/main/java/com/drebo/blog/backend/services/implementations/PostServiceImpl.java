@@ -4,6 +4,7 @@ import com.drebo.blog.backend.domain.PostStatus;
 import com.drebo.blog.backend.domain.entities.Category;
 import com.drebo.blog.backend.domain.entities.Post;
 import com.drebo.blog.backend.domain.entities.Tag;
+import com.drebo.blog.backend.domain.entities.User;
 import com.drebo.blog.backend.repositories.PostRepository;
 import com.drebo.blog.backend.services.CategoryService;
 import com.drebo.blog.backend.services.PostService;
@@ -51,5 +52,10 @@ public class PostServiceImpl implements PostService {
         }
 
         return postRepository.findAllByStatus(PostStatus.PUBLISHED);
+    }
+
+    @Override
+    public List<Post> getDraftPosts(User user) {
+        return postRepository.findAllByAuthorAndStatus(user, PostStatus.DRAFT);
     }
 }

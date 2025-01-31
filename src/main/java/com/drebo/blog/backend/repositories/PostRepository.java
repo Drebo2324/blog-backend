@@ -4,6 +4,7 @@ import com.drebo.blog.backend.domain.PostStatus;
 import com.drebo.blog.backend.domain.entities.Category;
 import com.drebo.blog.backend.domain.entities.Post;
 import com.drebo.blog.backend.domain.entities.Tag;
+import com.drebo.blog.backend.domain.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -22,5 +23,6 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     List<Post> findAllByStatusAndCategory(PostStatus postStatus, Category category);
     List<Post> findAllByStatusAndTagsContaining(PostStatus postStatus, Tag tag);
     List<Post> findAllByStatus(PostStatus postStatus);
+    List<Post> findAllByAuthorAndStatus(User author, PostStatus postStatus);
 
 }

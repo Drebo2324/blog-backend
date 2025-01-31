@@ -37,6 +37,8 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(auth -> auth
                         //Allow
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
+                        //must be authenticated to hit drafts endpoint
+                        .requestMatchers(HttpMethod.GET, "/api/v1/posts/drafts").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/tags/**").permitAll()
