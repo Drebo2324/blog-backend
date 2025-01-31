@@ -33,7 +33,7 @@ public class Post {
     //represent enum in db as string
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private PostStatus status;
+    private PostStatus postStatus;
 
     //load only when explicitly accessed
     @ManyToOne(fetch = FetchType.LAZY)
@@ -68,12 +68,12 @@ public class Post {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(content, post.content) && status == post.status && Objects.equals(readingTime, post.readingTime) && Objects.equals(createdAt, post.createdAt) && Objects.equals(updatedAt, post.updatedAt);
+        return Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(content, post.content) && postStatus == post.postStatus && Objects.equals(readingTime, post.readingTime) && Objects.equals(createdAt, post.createdAt) && Objects.equals(updatedAt, post.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, content, status, readingTime, createdAt, updatedAt);
+        return Objects.hash(id, title, content, postStatus, readingTime, createdAt, updatedAt);
     }
 
     //handle null createdAt / updatedAt
