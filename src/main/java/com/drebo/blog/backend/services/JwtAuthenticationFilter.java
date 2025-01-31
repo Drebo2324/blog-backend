@@ -40,7 +40,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 //set authentication token in the Spring Security context -> authenticate user for duration of request
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                //to access userId throughout request
+                //set userId from BlogUserDetails as RequestAttribute
+                //server-side attributes stored in the HttpServletRequest object / Spring internal request context
+                //access userId throughout request
                 if(userDetails instanceof BlogUserDetails) {
                     request.setAttribute("userId", ((BlogUserDetails) userDetails).getId());
                 }
