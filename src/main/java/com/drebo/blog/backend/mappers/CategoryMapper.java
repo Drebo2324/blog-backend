@@ -31,7 +31,7 @@ public interface CategoryMapper {
             return 0;
         }
         return posts.stream()
-                .filter(post -> PostStatus.PUBLISHED.equals(post.getStatus()))
+                .filter(post -> PostStatus.PUBLISHED.equals(post.getPostStatus()))
                 .count();
     }
 
