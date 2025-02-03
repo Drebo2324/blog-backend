@@ -123,6 +123,13 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(existingPost);
     }
 
+    @Override
+    public void deletePost(UUID id) {
+        //getPost will throw exception if not found
+        Post post = getPost(id);
+        postRepository.delete(post);
+    }
+
     private Integer calculateReadingTime(String content) {
         if(content == null || content.trim().isEmpty()) {
             return 0;
