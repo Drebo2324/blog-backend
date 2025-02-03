@@ -38,6 +38,14 @@ public class PostController {
         return new ResponseEntity<>(postsDto, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<PostDto> getPost(@PathVariable UUID id) {
+        Post post = postService.getPost(id);
+        PostDto postDto = postMapper.toDto(post);
+
+        return new ResponseEntity<>(postDto, HttpStatus.OK);
+    }
+
     //filter drafts based on logged-in user with userId
     //TODO: Implement proper Authorization
     @GetMapping(path = "/drafts")

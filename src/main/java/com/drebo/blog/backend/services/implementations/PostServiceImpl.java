@@ -32,6 +32,12 @@ public class PostServiceImpl implements PostService {
 
     private static final int WORDS_PER_MINUTE = 200;
 
+    @Override
+    public Post getPost(UUID postId) {
+        return postRepository.findById(postId).orElseThrow(() ->
+                new EntityNotFoundException("Post not found with ID:" + postId));
+    }
+
     @Transactional(readOnly = true) //no db calls make changes
     @Override
     //method can handle null params
