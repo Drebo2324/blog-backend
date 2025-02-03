@@ -11,6 +11,7 @@ import com.drebo.blog.backend.repositories.PostRepository;
 import com.drebo.blog.backend.services.CategoryService;
 import com.drebo.blog.backend.services.PostService;
 import com.drebo.blog.backend.services.TagService;
+import com.drebo.blog.backend.services.utils.ServiceUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,6 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final CategoryService categoryService;
     private final TagService tagService;
-
-    private static final int WORDS_PER_MINUTE = 200;
 
     @Override
     public Post getPost(UUID postId) {
@@ -88,7 +87,7 @@ public class PostServiceImpl implements PostService {
                 .postStatus(createPostRequest.getPostStatus())
                 .category(category)
                 .tags(new HashSet<>(tags))
-                .readingTime(calculateReadingTime(createPostRequest.getContent()))
+                .readingTime(ServiceUtils.calculateReadingTime(createPostRequest.getContent()))
                 .build();
 
         return postRepository.save(newPost);
@@ -104,7 +103,7 @@ public class PostServiceImpl implements PostService {
         existingPost.setTitle(updatePostRequest.getTitle());
         existingPost.setContent(updatePostRequest.getContent());
         existingPost.setPostStatus(updatePostRequest.getPostStatus());
-        existingPost.setReadingTime(calculateReadingTime(updatePostRequest.getContent()));
+        existingPost.setReadingTime(ServiceUtils.calculateReadingTime(updatePostRequest.getContent()));
 
         //check category and tags change before making unnecessary call to db
         UUID updatePostRequestCategoryId = updatePostRequest.getCategoryId();
@@ -128,18 +127,5 @@ public class PostServiceImpl implements PostService {
         //getPost will throw exception if not found
         Post post = getPost(id);
         postRepository.delete(post);
-    }
-
-    private Integer calculateReadingTime(String content) {
-        if(content == null || content.trim().isEmpty()) {
-            return 0;
-        }
-
-        //trim leading/trailing space
-        //split to array of substrings using any one or more space as delimiter
-        String[] words = content.trim().split("\\s+");
-        int wordCount = words.length;
-
-        return (int)(Math.ceil((double) wordCount / WORDS_PER_MINUTE));
     }
 }
