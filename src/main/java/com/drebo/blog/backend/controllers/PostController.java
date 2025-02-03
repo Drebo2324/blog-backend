@@ -1,13 +1,16 @@
 package com.drebo.blog.backend.controllers;
 
 import com.drebo.blog.backend.domain.CreatePostRequest;
+import com.drebo.blog.backend.domain.UpdatePostRequest;
 import com.drebo.blog.backend.domain.dtos.CreatePostRequestDto;
 import com.drebo.blog.backend.domain.dtos.PostDto;
+import com.drebo.blog.backend.domain.dtos.UpdatePostRequestDto;
 import com.drebo.blog.backend.domain.entities.Post;
 import com.drebo.blog.backend.domain.entities.User;
 import com.drebo.blog.backend.mappers.PostMapper;
 import com.drebo.blog.backend.services.PostService;
 import com.drebo.blog.backend.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +53,7 @@ public class PostController {
 
     //use userId so only logged-in user can create posts
     @PostMapping
-    public ResponseEntity<PostDto> createPost(@RequestBody CreatePostRequestDto request,
+    public ResponseEntity<PostDto> createPost(@Valid @RequestBody CreatePostRequestDto request,
                                                  @RequestAttribute UUID userId) {
 
         User loggedInUser = userService.getUserById(userId);
@@ -61,5 +64,19 @@ public class PostController {
         PostDto createdPostDto = postMapper.toDto(createdPost);
 
         return new ResponseEntity<>(createdPostDto, HttpStatus.CREATED);
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<PostDto> updatePost(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdatePostRequestDto request) {
+
+        UpdatePostRequest updatePostRequest = postMapper.toUpdatePostRequest(request);
+        Post updatedPost = postService.updatePost(id, updatePostRequest);
+        PostDto postDto = postMapper.toDto(updatedPost);
+
+        return new ResponseEntity<>(postDto, HttpStatus.OK);
+
+
     }
 }
