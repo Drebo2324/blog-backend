@@ -2,6 +2,7 @@ package com.drebo.blog.backend.controllers;
 
 import com.drebo.blog.backend.domain.dtos.CategoryDto;
 import com.drebo.blog.backend.domain.dtos.CreateCategoryRequest;
+import com.drebo.blog.backend.domain.dtos.UpdateCategoryRequest;
 import com.drebo.blog.backend.domain.entities.Category;
 import com.drebo.blog.backend.mappers.CategoryMapper;
 import com.drebo.blog.backend.services.CategoryService;
@@ -37,6 +38,16 @@ public class CategoryController {
                 categoryMapper.toDto(createdCategory),
                 HttpStatus.CREATED
         );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryDto> updateCategory(@PathVariable UUID id, @Valid @RequestBody UpdateCategoryRequest request) {
+
+        Category category = categoryMapper.toEntity(request);
+        Category updatedCategory = categoryService.updateCategory(id, category);
+        CategoryDto categoryDto = categoryMapper.toDto(updatedCategory);
+
+        return new ResponseEntity<>(categoryDto, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
